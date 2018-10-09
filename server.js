@@ -6,8 +6,14 @@ import morgan from 'morgan'
 import config from './core/config/config.dev'
 import cars from './routes/cars.route'
 import users from './routes/users.route'
+import cm from './routes/cm.route'
+import quest from './routes/quest.route'
 import purifiers from './routes/purifiers.route'
 import connectToDb from './db/connect'
+import multer from "multer";
+import path from "path";
+
+var upload = multer({ dest: 'uploads/'})
 
 const port = config.serverPort;
 logger.stream = {
@@ -27,11 +33,13 @@ app.use(morgan("dev", { "stream": logger.stream }));
 app.use('/users', users);
 app.use('/cars', cars);
 app.use('/purifiers', purifiers);
-
+app.use('/cm', cm);
+app.use('/quests', quest);
 
 //Index route
 app.get('/', (req, res) => {
-    res.send('test');
+    // res.send('tesat');
+    res.sendFile(path.join(__dirname + '/index.html'))
 });
 
 app.listen(port, () => {
