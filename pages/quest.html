@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<style>
+    .divFrm{
+        padding: 30px;
+        width: 200px;
+        height: 150px;
+        border-style: solid;
+        border-width: 1px;
+    }
+    hr {
+        padding: 0px;
+    }
+</style>
+<body>
+    <h3>조건을 추가하세요</h3>
+   <div id="addedKeyword">
+       <div id="keyword_Frm1" class="divFrm">
+    <form action="http://localhost:3000/quests/addquest" id="questFrm1" target="1" method="POST">
+
+        <label>조건 : </label><input type="text" name="quest" placeholder="조건을 입력하세요"><hr>
+        <labe> 응답 : </labe><input type="text" name="answers" placeholder="응답을 입력하세요"><br>
+        <labe> 응답 : </labe><input type="text" name="answers" placeholder="응답을 입력하세요"><br>
+        <labe> 응답 : </labe><input type="text" name="answers" placeholder="응답을 입력하세요"><br>
+        <labe> 응답 : </labe><input type="text" name="answers" placeholder="응답을 입력하세요"><br>
+
+      </form>
+        </div>
+    </div>  
+    
+    
+    <a href="javascript:addKeywordForm()">추가</a>
+        <input type="button" onclick="javascript:Multisubmit();" id="multibtn" value="upload">
+
+<script type="text/javascript">
+$(function(){
+ $("#btn_submit").click(function(){
+    $.post("http://localhost:3000/quests/addquest", $(".sform").serialize(), function(data){
+
+   });
+ });
+});
+</script>
+
+<form class="sform" action="http://localhost:3000/quests/addquest">
+<label>조건 : </label><input type="text" name="quest" placeholder="조건을 입력하세요"><hr>
+        <labe> 응답 : </labe><input type="text" name="answers" placeholder="응답을 입력하세요"><br>
+        <labe> 응답 : </labe><input type="text" name="answers" placeholder="응답을 입력하세요"><br>
+        <labe> 응답 : </labe><input type="text" name="answers" placeholder="응답을 입력하세요"><br>
+        <labe> 응답 : </labe><input type="text" name="answers" placeholder="응답을 입력하세요"><br>
+</form>
+
+<form class="sform" action="http://localhost:3000/quests/addquest">
+<label>조건 : </label><input type="text" name="quest" placeholder="조건을 입력하세요"><hr>
+        <labe> 응답 : </labe><input type="text" name="answers" placeholder="응답을 입력하세요"><br>
+        <labe> 응답 : </labe><input type="text" name="answers" placeholder="응답을 입력하세요"><br>
+        <labe> 응답 : </labe><input type="text" name="answers" placeholder="응답을 입력하세요"><br>
+        <labe> 응답 : </labe><input type="text" name="answers" placeholder="응답을 입력하세요"><br>
+</form><form class="sform" action="http://localhost:3000/quests/addquest">
+<label>조건 : </label><input type="text" name="quest" placeholder="조건을 입력하세요"><hr>
+        <labe> 응답 : </labe><input type="text" name="answers" placeholder="응답을 입력하세요"><br>
+        <labe> 응답 : </labe><input type="text" name="answers" placeholder="응답을 입력하세요"><br>
+        <labe> 응답 : </labe><input type="text" name="answers" placeholder="응답을 입력하세요"><br>
+        <labe> 응답 : </labe><input type="text" name="answers" placeholder="응답을 입력하세요"><br>
+</form>
+
+<form class="sform" action="http://localhost:3000/quests/addquest">
+<label>조건 : </label><input type="text" name="quest" placeholder="조건을 입력하세요"><hr>
+        <labe> 응답 : </labe><input type="text" name="answers" placeholder="응답을 입력하세요"><br>
+        <labe> 응답 : </labe><input type="text" name="answers" placeholder="응답을 입력하세요"><br>
+        <labe> 응답 : </labe><input type="text" name="answers" placeholder="응답을 입력하세요"><br>
+        <labe> 응답 : </labe><input type="text" name="answers" placeholder="응답을 입력하세요"><br>
+</form>
+
+<span id="btn_submit">ㅁㅁㅁ ㄴ</span>
+<script type="text/javascript">
+        var count = 2;
+    var i=1;
+
+
+/**
+* Keyword Form 추가를 위한 Javascript
+* @author HyeYoungOh
+*/
+function addKeywordForm() {
+
+  /**
+   * 이 부분에는 추가될 부분의 div 이름을 넣으시면 됩니당
+   */  
+   var addedFormDiv = document.getElementById("addedKeyword");
+
+   /**
+     * str로 선언한 부분에 원하는 내용에 대해서 넣어주시면 됩니다.
+    */ 
+   var str = ' <form action='+'"http://localhost:3000/quests/addquest"'+'id="questFrm'+count+'"'+'target="'+count+'"'+ 'method="POST">'+
+
+        '<label>조건 : </label><input type="text" name="quest" placeholder="조건을 입력하세요"><hr>'+
+        '<labe> 응답 : </labe><input type="text" name="answers" placeholder="응답을 입력하세요"><br>'+
+        '<labe> 응답 : </labe><input type="text" name="answers" placeholder="응답을 입력하세요"><br>'+
+        '<labe> 응답 : </labe><input type="text" name="answers" placeholder="응답을 입력하세요"><br>'+
+        '<labe> 응답 : </labe><input type="text" name="answers" placeholder="응답을 입력하세요"><br>'+
+       '<a href="javascript:delKeywordForm('+count+')"/>제거</a>'+
+      '</form>';
+    console.log(str);
+  
+
+  var addedDiv = document.createElement("div"); // 폼 생성
+   addedDiv.setAttribute("id", "keyword_Frm"+count);
+   addedDiv.setAttribute("class", "divFrm");
+   addedDiv.innerHTML  = str; // 폼 Div안에 HTML삽입
+   addedFormDiv.appendChild(addedDiv); // 삽입할 DIV에 생성한 폼 삽입
+
+	count++;
+    
+    console.log(count);
+	
+}
+    
+function delKeywordForm(thisCount){
+    
+    var addedFormDiv = document.getElementById("addedKeyword");
+    
+    if(count>1){
+        var thisDiv = document.getElementById("keyword_Frm"+thisCount);
+        addedFormDiv.removeChild(thisDiv);
+    }else{
+        document.addedFormDiv.reset();
+    }
+    
+    count--;
+    console.log(count);
+}
+
+function Multisubmit(){
+    console.log(count);
+    for(i; i<count; i++){
+        document.getElementById("questFrm"+i).submit();
+        sleep(500);
+    }
+    i = 1;
+
+
+}
+
+
+
+
+</script>
+</body>
+</html>

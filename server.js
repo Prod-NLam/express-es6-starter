@@ -149,6 +149,7 @@ controller.addConstruct = async (req, res) => {
         img : imgs
     });
     try{
+
         const savedConstruct = await
         Constructmodel.addConstruct(constructToAdd);
         logger.info('Adding Construct');

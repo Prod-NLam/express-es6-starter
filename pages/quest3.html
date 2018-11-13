@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<title>Form</title>
+
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+<link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+<link href="css/animate.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">
+
+<link href="css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
+</head>
+
+<body>
+    
+    <div id="wrapper">
+
+
+        <div id="page-wrapper" class="gray-bg" style="margin: 0px;">
+            
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox ">
+                        <div class="ibox-title">
+                            <h3>조건을 추가하세요</h3>
+                        </div>
+                        <div class="ibox-content" id="ibox-content">
+                            <form action="http://localhost:3000/quests/addquest" id="questFrm1" name="construct1" onsubmit="return check();" target="1" method="POST">
+                                <div class="form-group  row" id="questdiv1"><label class="col-sm-2 col-form-label">Question</label>
+                                    <div class="col-sm-10"><input type="text" name="quest" class="form-control"></div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+
+                                <div class="form-group  row" id="questdiv2"><label class="col-sm-2 col-form-label">Answer 1</label>
+                                    <div class="col-sm-10"><input type="text" id="answer1" name="answers" class="form-control"></div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+                                
+                                <div class="form-group  row" id="questdiv3"><label class="col-sm-2 col-form-label">Answer 2</label>
+                                    <div class="col-sm-10"><input type="text" id="answer2" name="answers" class="form-control"></div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+                                
+                                <div class="form-group  row" id="questdiv4"><label class="col-sm-2 col-form-label">Answer 3</label>
+                                    <div class="col-sm-10"><input type="text" id="answer3" name="answers" class="form-control"></div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group  row" id="questdiv5"><label class="col-sm-2 col-form-label">Answer 4</label>
+                                    <div class="col-sm-10"><input type="text" id="answer4" name="answers" class="form-control"></div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+                               
+                                
+                            </form>
+                        </div>
+                        
+                        <div class="form-group row">
+                                    <div class="col-sm-4 col-sm-offset-2">
+                                        <button class="btn btn-white btn-sm" type="submit">Cancel</button>
+                                        <button class="btn btn-primary btn-sm" type="button" onclick="javascript:addKeywordForm()"><i class="fa fa-plus-square">&nbsp;&nbsp;</i>Add content</button>
+                                        <button class="btn btn-success btn-sm" type="button" onclick="javascript:Multisubmit();"><i class="fa fa-upload"></i>&nbsp;&nbsp;<span class="bold">Upload</span></button>
+                                    </div>
+                                </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        </div>
+        </div>
+    
+    
+    <h3>조건을 추가하세요</h3>
+   <div id="addedKeyword">
+       <div id="keyword_Frm1" class="divFrm">
+    <form action="http://localhost:3000/quests/addquest" id="questFrm1" target="1" method="POST">
+
+        <label>조건 : </label><input type="text" name="quest" placeholder="조건을 입력하세요"><hr>
+        <labe> 응답 : </labe><input type="text" name="answers" placeholder="응답을 입력하세요"><br>
+        <labe> 응답 : </labe><input type="text" name="answers" placeholder="응답을 입력하세요"><br>
+        <labe> 응답 : </labe><input type="text" name="answers" placeholder="응답을 입력하세요"><br>
+        <labe> 응답 : </labe><input type="text" name="answers" placeholder="응답을 입력하세요"><br>
+
+      </form>
+        </div>
+    </div>  
+    
+    
+    <a href="javascript:addKeywordForm()">추가</a>
+        <input type="button" onclick="javascript:Multisubmit();" id="multibtn" value="upload">
+
+    <!-- Mainly scripts -->
+<script src="js/jquery-3.1.1.min.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap.js"></script>
+<script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+<script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+<!-- Custom and plugin javascript -->
+<script src="js/inspinia.js"></script>
+<script src="js/plugins/pace/pace.min.js"></script>
+
+<!-- iCheck -->
+<script src="js/plugins/iCheck/icheck.min.js"></script>
+<script type="text/javascript">
+        var count = 2;
+    var i=1;
+
+
+/**
+* Keyword Form 추가를 위한 Javascript
+* @author HyeYoungOh
+*/
+function addKeywordForm() {
+ if(check() == true){
+
+  /**
+   * 이 부분에는 추가될 부분의 div 이름을 넣으시면 됩니당
+   */  
+   var addedFormDiv = document.getElementById("ibox-content");
+
+   /**
+     * str로 선언한 부분에 원하는 내용에 대해서 넣어주시면 됩니다.
+    */                             
+   var str = ' <form action='+'"http://localhost:3000/quests/addquest"'+'id="questFrm'+count+'"'+'name="construct'+count+'"'+'target="'+count+'"'+ 'method="POST">'+
+                                        '<div class="hr-line-dashed"></div>'+
+        '<div class="form-group  row" id="questdiv1"><label class="col-sm-2 col-form-label">Question</label>'+
+                                    '<div class="col-sm-10"><input type="text" name="quest" class="form-control"></div>'+
+                                '</div>'+
+                                        '<div class="hr-line-dashed"></div>'+
+        '<div class="form-group  row" id="questdiv2"><label class="col-sm-2 col-form-label">Answer 1</label>'+
+                                    '<div class="col-sm-10"><input type="text" id="answer1" name="answers" class="form-control"></div>'+
+                                '</div>'+
+                                '<div class="hr-line-dashed"></div>'+
+                                
+                                '<div class="form-group  row" id="questdiv3"><label class="col-sm-2 col-form-label">Answer 2</label>'+
+                                    '<div class="col-sm-10"><input type="text" id="answer2" name="answers" class="form-control"></div>'+
+                                '</div>'+
+                                '<div class="hr-line-dashed"></div>'+
+                                
+                                '<div class="form-group  row" id="questdiv4"><label class="col-sm-2 col-form-label">Answer 3</label>'+
+                                    '<div class="col-sm-10"><input type="text" id="answer3" name="answers" class="form-control"></div>'+
+                                '</div>'+
+                                '<div class="hr-line-dashed"></div>'+
+                                '<div class="form-group  row" id="questdiv5"><label class="col-sm-2 col-form-label">Answer 4</label>'+
+                                    '<div class="col-sm-10"><input type="text" id="answer4" name="answers" class="form-control"></div>'+
+                                '</div>'+
+                                '<div class="hr-line-dashed"></div>'+
+       '<a href="javascript:delKeywordForm('+count+')"/>제거</a>'+
+      '</form>';
+    console.log(str);
+  
+
+  var addedDiv = document.createElement("div"); // 폼 생성
+   addedDiv.setAttribute("id", "keyword_Frm"+count);
+   addedDiv.setAttribute("class", "divFrm");
+   addedDiv.innerHTML  = str; // 폼 Div안에 HTML삽입
+   addedFormDiv.appendChild(addedDiv); // 삽입할 DIV에 생성한 폼 삽입
+
+	count++;
+    
+    console.log(count);
+    }
+}
+    
+function delKeywordForm(thisCount){
+    
+    var addedFormDiv = document.getElementById("ibox-content");
+    
+    if(count>1){
+        var thisDiv = document.getElementById("keyword_Frm"+thisCount);
+        addedFormDiv.removeChild(thisDiv);
+    }else{
+        document.addedFormDiv.reset();
+    }
+    
+    count--;
+    console.log(count);
+}
+
+function Multisubmit(){
+ if(check() == true){
+    console.log(count);
+    for(i; i<count; i++){
+        document.getElementById("questFrm"+i).submit();
+        sleep(500);
+    }
+    i = 1;
+ }
+
+}
+
+function check(){
+    var abc = 1;
+    alert(count);
+    alert(construct+1.quest.value);
+    for(var i=1; i<=count;i++){
+        if(construct+i.quest.value == ""){
+        alert(construct+i.quest.value+"quest 값을 입력해 주세요.");
+        document.getElementById("questdiv1"+i).className ="form-group  row has-error";
+        construct+i.quest.focus();
+        return false;
+    }
+    }
+    
+
+    if(document.getElementById("answer1").value ==""){
+        alert(document.getElementById("answer1").value+"answer1 값을 입력해 주세요.");
+        document.getElementById("questdiv2").className ="form-group  row has-error";
+        document.getElementById("answer1").focus();
+        return false;
+    }
+
+    if(document.getElementById("answer2").value ==""){
+        alert(document.getElementById("answer2").value+"answer2 값을 입력해 주세요.");
+        document.getElementById("questdiv3").className ="form-group  row has-error";
+        document.getElementById("answer2").focus();
+        return false;
+    }
+    if(document.getElementById("answer3").value ==""){
+        alert(document.getElementById("answer3").value+"answer3 값을 입력해 주세요.");
+        document.getElementById("questdiv4").className ="form-group  row has-error";
+        document.getElementById("answer3").focus();
+        return false;
+    }
+    if(document.getElementById("answer4").value ==""){
+        alert(document.getElementById("answer4").value+"answer4 값을 입력해 주세요.");
+        document.getElementById("questdiv5").className ="form-group  row has-error";
+        document.getElementById("answer4").focus();
+        return false;
+    }
+    
+    else{
+        return true;
+    }
+
+}
+
+
+</script>
+</body>
+</html>

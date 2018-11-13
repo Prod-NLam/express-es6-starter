@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+</head>
+<body>
+
+<header>
+
+</header>
+
+<main>
+    <div>
+        <h1> <%= location_name%></h1>
+        <p><%=location_address%></p>
+        <p><%=actor%></p>
+        <p><%=date%></p>
+        <p></p>
+        <ul>
+            <% quest.forEach(function(quest){%>
+                <li><%= quest.question%></li>
+                <li><%= quest.answer%></li>
+            <%});%>
+        </ul>
+        <ul>
+            <% img.forEach(function(img){%>
+                <li><img style="width:150px; height: 150px;"src="<%= img.path%>"/></li>
+                <li><%= img.latitude%></li>
+                <li><%= img.longitude%></li>
+            <%});%>
+        </ul>
+
+
+
+    </div>
+</main>
+
+<footer>
+
+</footer>
+
+</body>
+</html>
