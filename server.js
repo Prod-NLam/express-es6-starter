@@ -14,10 +14,14 @@ import multer from "multer";
 import path from "path";
 import mongoose from "mongoose";
 import FCM from "fcm-node";
+import pdf from "html-pdf";
+import ejs from "ejs";
+import fs from "fs";
 
 var upload = multer({ dest: 'uploads/'})
 var actorname;
-
+var options = {format : 'Letter'};
+// var html = fs.readFileSync('./views/index.ejs','utf8');
 
 const port = config.serverPort;
 logger.stream = {
@@ -29,10 +33,13 @@ logger.stream = {
 connectToDb();
 
 const app = express();
+app.set('view engine', 'ejs');
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan("dev", { "stream": logger.stream }));
+
+app.use('/uploads',express.static(__dirname+'/uploads'));
 
 app.use('/users', users);
 app.use('/cars', cars);
@@ -46,6 +53,7 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname + '/index.html'))
 });
 
+
 const controller = {};
 
 const ConstructSchema = mongoose.Schema(
@@ -56,13 +64,13 @@ const ConstructSchema = mongoose.Schema(
         date : Date,
         quest : [{
             question : String,
-            answer : Number
+            answer : String
         }],
         img : [{
             origin_name : String,
             path : String,
-            latitude : Number,
-            longtitude : Number
+            latitude : String,
+            longitude : String,
         }]
     }
 )
@@ -80,19 +88,30 @@ controller.addConstruct = async (req, res) => {
     var quests = new Array();
     var questions = new Array();
     var answers = new Array();
-    console.log(req.body.quest)
-    console.log(req.body.question)
-    console.log(req.body.answer)
+    console.log("files == "+req.files)
+    console.log("quest == "+req.body.quest)
+    console.log("json == "+JSON.parse(req.body.quest))
+    console.log("answer == "+req.body.answer)
     var map = new Map();
     req.files.forEach(c=>{
-        imgs.push({ origin_name : c.originalname, path : c.path, latitude : 0, longtitude : 0});
+        imgs.push({ origin_name : ((c.originalname).split('&'))[0], path : "file://"+__dirname+"/"+c.path, latitude : ((c.originalname).split('&'))[1], longitude : ((c.originalname).split('&'))[2]});
     })
+
     imgs.forEach(e=>{
-        console.log(e.origin_name);
-        console.log(e.path);
+        console.log("origin_name == "+e.origin_name);
+        console.log("path == "+e.path);
+        console.log("latitude == "+e.latitude);
+        console.log("longitude == "+e.longitude);
     })
+
+    JSON.parse(req.body.quest).forEach(e=>{
+        console.log(e);
+        quests.push({ question : e.question, answer : e.answer})
+    })
+
     // req.body.quest.forEach(e=>{
-    //     quests.push({ question : e.question, answer : e.answer});
+    //     console.log(e);
+    //     quests.push({ question : e.question, answer : e.answer})
     // })
 
     //console.log(quests[(quests.length/2)-1]);
@@ -117,7 +136,6 @@ controller.addConstruct = async (req, res) => {
     for(var i =0; i<= questions.length; i++){
         console.log(questions[i]);
         console.log(answers[i]);
-        console.log("yes");
     }
 
     let constructToAdd = Constructmodel({
@@ -134,9 +152,41 @@ controller.addConstruct = async (req, res) => {
         const savedConstruct = await
         Constructmodel.addConstruct(constructToAdd);
         logger.info('Adding Construct');
-        console.log(actorname);
+        console.log("actorname == "+actorname);
+        push_data.data.link ='http://192.168.0.11:8080/uploads/'+savedConstruct.actor+'/'+savedConstruct.date+'.pdf';
         pushMessage();
-        res.send('added: ' + savedConstruct);
+        // res.send('added: ' + savedConstruct);
+        res.render('index',{
+            location_name : savedConstruct.location_name,
+            location_address : savedConstruct.location_address,
+            actor : savedConstruct.actor,
+            date : savedConstruct.date,
+            quest : savedConstruct.quest,
+            img : savedConstruct.img
+        })
+
+        
+        fs.mkdir(__dirname+'/uploads'+'/'+savedConstruct.actor, function(err){
+            if(err){
+                return console.error(err);
+            }
+            console.log("success");
+        });
+
+        fs.writeFileSync(__dirname+'/uploads'+'/'+savedConstruct.actor+'/'+savedConstruct.date+'.html',ejs.render(fs.readFileSync('./views/index.ejs','utf-8'),{
+            location_name : savedConstruct.location_name,
+            location_address : savedConstruct.location_address,
+            actor : savedConstruct.actor,
+            date : savedConstruct.date,
+            quest : savedConstruct.quest,
+            img : savedConstruct.img
+        }),'utf8');
+        pdf.create(fs.readFileSync(__dirname+'/uploads'+'/'+savedConstruct.actor+'/'+savedConstruct.date+'.html','utf8'), options).toFile(__dirname+'/uploads'+'/'+savedConstruct.actor+'/'+savedConstruct.date+'.pdf', function(err, res){
+            if (err) return console.log(err);
+            console.log(res);
+        });
+        
+        console.log(push_data.data.link)
     }
     catch(err){
         logger.error('Error in getting construct- '+ err);
@@ -147,8 +197,14 @@ Constructmodel.addConstruct = (constructToAdd) => {
     return constructToAdd.save();
 }
 
+app.get('/index', (req, res)=>{
+    res.render(__dirname+'/pages/index',{
+        location_name : req.body.location_name
+    });
+});
+
 var serverKey = 'AAAAD-S-xTQ:APA91bHgVqtORke4oGgGBr5KlmOOgIpEFrb5o3yM0JB9LliJomy7zeAn9pvgwHk_lcXCYiVlbbiw39B6sqiX2zPJVJv-CYr5hwyU-xMJEhS0up-0girqluh6sYDd19cQbCufv2T5HgXL';
-var client_token = 'dur6pyaPCoY:APA91bGAuCvN9wxFZsPXrPIRJH0QXHkB2MS4715fBdSa-jv50Eqwgy49SFJDOnrvX0BRHiZrigfZVttDl8kCbUL82XhlPW_971LBusQADYXsAVkyLi2xL8rznnHwUuSwuk8cNYKVZ6kn';
+var client_token = 'c3l6pY6JqTs:APA91bEUqCmc2z-t6j8NdYYQhTaM6pIfaBpZIxWSFOTGESH5rt8eKxgpoPTMqiAqGCIcfriAsHkHvavoJvlQTOhqpcq-0G689-st7N1VxTweLDfUs1FRWUnSB4oVMLAQIOcEYrrx-JMP';
 
 
 var push_data = {
@@ -156,11 +212,11 @@ var push_data = {
     to: client_token,
     // App이 실행중이지 않을 때 상태바 알림으로 등록할 내용
     notification: {
-        title: "지우지마셈",
-        body: "http://www.naver.com",
+        title: "새로운 알림이 왔습니다.",
+        body: "눌러서 pdf열기",
         sound: "default",
         //click_action: "FCM_PLUGIN_ACTIVITY",
-        click_action: "http://www.naver.com",
+        click_action: "http://192.168.10.32:8080/uploads",
         icon: "fcm_push_icon"
     },
     // 메시지 중요도
@@ -266,7 +322,7 @@ controller.addPhoto = async (req, res) => {
         
         paths.push(c.path);
 
-    })
+    }) 
     let photoToAdd = Photomodel({
         path : paths,
         firstname : req.body.firstname,
