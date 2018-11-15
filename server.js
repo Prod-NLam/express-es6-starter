@@ -154,7 +154,7 @@ controller.addConstruct = async (req, res) => {
         Constructmodel.addConstruct(constructToAdd);
         logger.info('Adding Construct');
         console.log("actorname == "+actorname);
-        push_data.data.link ='http://192.168.0.11:8080/uploads/'+savedConstruct.actor+'/'+savedConstruct.date+'.pdf';
+        push_data.data.link ='http://192.168.10.32:8080/uploads/'+savedConstruct.actor+'/'+savedConstruct.date+'.pdf';
         pushMessage();
         // res.send('added: ' + savedConstruct);
         res.render('index',{
