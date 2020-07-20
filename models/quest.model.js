@@ -1,9 +1,10 @@
 import mongoose from 'mongoose';
+import { SSL_OP_NO_QUERY_MTU } from 'constants';
 
 const QuestSchema = mongoose.Schema(
     {
         quest : String,
-        answers : [Number]
+        answers : [String]
     }, {collection : 'Quest'}
 );
 

@@ -3,20 +3,32 @@
 <head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
-$(document).ready(function(){
-    $("button").click(function(){
-        $.getJSON("/quests/allquest", function(result){
-            $.each(result, function(i, field){
-                $("div").append(field + " ");
-            });
-        });
-    });
-});
+
 </script>
 </head>
 <body>
+    <form action="http://localhost:3000/construct" method="POST" enctype="multipart/form-data">
+        <input type="file" name="avatar" multiple><br>
+        <input type="text" name="actor" value="주민님"><br>
+        <input type="text" name="location_name" value="홍대"><br>
+        <input type="text" name="location_address" value="서울특별시 마포구"><br>
+        
+            <input type="text" name="question" value="김완각"><br>
+            <input type="text" name="answer" value="1"><br>
 
-<button>Get JSON data</button>
+            <input type="text" name="question" value="명성현"><br>
+            <input type="text" name="answer" value="2"><br>
+
+            <input type="text" name="question" value="임재균"><br>
+            <input type="text" name="answer" value="3"><br>
+
+        <input type="submit" value="ok">
+      </form>
+      
+      <form action="http://localhost:3000/addtoken" method="POST" enctype="multipart/form-data">
+        <input type="text" name="token" value="dur6pyaPCoY:APA91bGAuCvN9wxFZsPXrPIRJH0QXHkB2MS4715fBdSa-jv50Eqwgy49SFJDOnrvX0BRHiZrigfZVttDl8kCbUL82XhlPW_971LBusQADYXsAVkyLi2xL8rznnHwUuSwuk8cNYKVZ6kn">
+        <input type="submit" value="submit">
+    </form>
 
 <div></div>
 
